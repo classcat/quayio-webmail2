@@ -7,7 +7,7 @@ MAINTAINER ClassCat Co.,Ltd. <support@classcat.com>
 ########################################################################
 
 #--- HISTORY -----------------------------------------------------------
-# 29-may-15 : webmail2.
+# 29-may-15 : webmail2, using initdb.sh
 # 22-may-15 : quay.io.
 # 19-may-15 : trusty.
 # 17-may-15 : sed -i.bak
