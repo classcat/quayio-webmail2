@@ -46,7 +46,8 @@ RUN apt-get install -y pwgen \
 COPY assets/config.inc.php /var/www/html/config/config.inc.php
 
 WORKDIR /opt
-COPY assets/cc-init.sh /opt/bin/cc-init.sh
+COPY assets/cc-init.sh   /opt/bin/cc-init.sh
+COPY assets/cc-initdb.sh /opt/bin/cc-initdb.sh
 
 EXPOSE 22 80
 
