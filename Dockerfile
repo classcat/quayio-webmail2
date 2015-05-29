@@ -2,11 +2,12 @@ FROM ubuntu:trusty
 MAINTAINER ClassCat Co.,Ltd. <support@classcat.com>
 
 ########################################################################
-# ClassCat/Webmail Dockerfile
+# ClassCat/Webmail2 Dockerfile
 #   Maintained by ClassCat Co.,Ltd ( http://www.classcat.com/ )
 ########################################################################
 
 #--- HISTORY -----------------------------------------------------------
+# 29-may-15 : webmail2.
 # 22-may-15 : quay.io.
 # 19-may-15 : trusty.
 # 17-may-15 : sed -i.bak
