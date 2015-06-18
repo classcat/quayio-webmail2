@@ -6,6 +6,7 @@
 ########################################################################
 
 #--- HISTORY 2----------------------------------------------------------
+# 18-jun-15 : modified for start method.
 # 29-may-15 : webmail2.
 #
 #--- HISTORY -----------------------------------------------------------
@@ -61,7 +62,12 @@ function put_public_key() {
 #############
 
 function save_env_for_config_mysql () {
-  # echo $MYSQL_ROOT_PASSWORD > /root/mysqlpass
+
+  if [ -e /opt/env.sh ]; then
+    echo "ClassCat Warning >> /opt/env.sh found, then skip configuration."
+    return
+  fi
+
   echo "export MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" > /opt/env.sh
 
   #mysql -u root -p${MYSQL_ROOT_PASSWORD} -h mysql -e "CREATE DATABASE webmail"
@@ -123,6 +129,11 @@ function set_config_inc_php () {
 # See http://docs.docker.com/articles/using_supervisord/
 
 function proc_supervisor () {
+  if [ -e /etc/supervisor/conf.d/supervisord.conf ]; then
+    echo "ClassCat Warning >> /etc/supervisor/conf.d/supervisord.conf found, then skip configuration."
+    return
+  fi
+
   cat > /etc/supervisor/conf.d/supervisord.conf <<EOF
 [program:ssh]
 command=/usr/sbin/sshd -D
@@ -142,7 +153,14 @@ init
 change_root_password
 put_public_key
 save_env_for_config_mysql
-set_config_inc_php
+
+if [ -e /opt/cc-init_done ]; then
+  echo "ClassCat Warning >> /opt/cc-init_done found, then skip wp configuration."
+else
+  set_config_inc_php
+  touch /opt/cc-init_done
+fi
+
 proc_supervisor
 
 exit 0
