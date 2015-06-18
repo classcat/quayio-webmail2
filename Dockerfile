@@ -7,6 +7,7 @@ MAINTAINER ClassCat Co.,Ltd. <support@classcat.com>
 ########################################################################
 
 #--- HISTORY -----------------------------------------------------------
+# 29-may-15 : call cc-initdb.sh at the entry point.
 # 29-may-15 : webmail2, using initdb.sh
 # 22-may-15 : quay.io.
 # 19-may-15 : trusty.
@@ -22,6 +23,8 @@ RUN apt-get update && apt-get -y upgrade \
   && apt-get install -y openssh-server supervisor rsyslog mysql-client \
        apache2 php5 php5-mysql php5-mcrypt php5-intl \
        php5-gd php5-json php5-curl php5-imagick libapache2-mod-php5 \
+  && apt-get install -y pwgen \
+  && apt-get clean \
   && mkdir -p /var/run/sshd \
   && sed -i.bak -e "s/^PermitRootLogin\s*.*$/PermitRootLogin yes/" /etc/ssh/sshd_config
 # RUN sed -i -e 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
@@ -32,9 +35,7 @@ RUN php5enmod mcrypt \
   && sed -i.bak -e "s/^;date\.timezone =.*$/date\.timezone = 'Asia\/Tokyo'/" /etc/php5/apache2/php.ini
 
 WORKDIR /usr/local
-RUN apt-get install -y pwgen \
-  && apt-get clean \
-  && wget http://sourceforge.net/projects/roundcubemail/files/roundcubemail/1.1.1/roundcubemail-1.1.1-complete.tar.gz \
+RUN wget http://sourceforge.net/projects/roundcubemail/files/roundcubemail/1.1.1/roundcubemail-1.1.1-complete.tar.gz \
   && tar xfz roundcubemail-1.1.1-complete.tar.gz \
   && mv /var/www/html /var/www/html.orig \
   && cp -r roundcubemail-1.1.1 /var/www/html \
@@ -51,4 +52,5 @@ COPY assets/cc-initdb.sh /opt/bin/cc-initdb.sh
 
 EXPOSE 22 80
 
-CMD /opt/bin/cc-init.sh; /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+CMD /opt/bin/cc-init.sh; /opt/bin/cc-initdb.sh; /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+#CMD /opt/bin/cc-init.sh; /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
